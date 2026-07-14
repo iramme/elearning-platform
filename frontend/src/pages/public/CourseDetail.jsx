@@ -196,7 +196,7 @@ export default function CourseDetail() {
 
             {isFullyUnlocked ? (
               <button
-                onClick={() => navigate(`/learn/${course.id}`)}
+                onClick={() => navigate(`/learn/${course.slug}`)}
                 className="btn-secondary w-full flex items-center justify-center gap-2"
               >
                 <CheckCircle2 className="w-5 h-5" /> Accéder au cours
