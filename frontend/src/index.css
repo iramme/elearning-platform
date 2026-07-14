@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #F5F3FF;
+  --color-primary-100: #EDE9FE;
+  --color-primary-200: #DDD6FE;
+  --color-primary-300: #C4B5FD;
+  --color-primary-400: #A78BFA;
+  --color-primary-500: #8B5CF6;
+  --color-primary-600: #7C3AED;
+  --color-primary-700: #6D28D9;
+  --color-primary-800: #5B21B6;
+  --color-primary-900: #4C1D95;
+
+  --color-secondary-50: #FFF7ED;
+  --color-secondary-100: #FFEDD5;
+  --color-secondary-300: #FDBA74;
+  --color-secondary-400: #FB923C;
+  --color-secondary-500: #F97316;
+  --color-secondary-600: #EA580C;
+
+  --color-success-50: #ECFDF5;
+  --color-success-100: #D1FAE5;
+  --color-success-400: #34D399;
+  --color-success-500: #10B981;
+  --color-success-600: #059669;
+
+  --color-dark: #1E1B2E;
+
+  --font-sans: "Poppins", "Inter", sans-serif;
+  --font-display: "Clash Display", "Poppins", sans-serif;
+}
+
+body {
+  background-color: #FAFAF9;
+  color: var(--color-dark);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn-primary {
+  @apply bg-primary-600 hover:bg-primary-700 text-white font-semibold px-6 py-3 rounded-xl
+         transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.35);
+}
+.btn-secondary {
+  @apply bg-secondary-500 hover:bg-secondary-600 text-white font-semibold px-6 py-3 rounded-xl
+         transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
+  box-shadow: 0 0 40px rgba(251, 146, 60, 0.35);
+}
+.btn-outline {
+  @apply border-2 border-primary-600 text-primary-600 hover:bg-primary-50 font-semibold
+         px-6 py-3 rounded-xl transition-all duration-300;
+}
+.card {
+  @apply bg-white rounded-2xl p-6 transition-all duration-300;
+  box-shadow: 0 4px 24px rgba(30, 27, 46, 0.08);
+}
+.card:hover {
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.35);
+}
+.badge-success {
+  @apply bg-success-100 text-success-600 text-xs font-bold px-3 py-1 rounded-full;
+}
+.progress-bar {
+  @apply h-2 rounded-full bg-primary-100 overflow-hidden;
+}
+.progress-bar-fill {
+  @apply h-full bg-gradient-to-r from-primary-500 to-secondary-400 rounded-full transition-all duration-500;
+}
+.bg-gradient-hero {
+  background: linear-gradient(135deg, #7C3AED 0%, #A78BFA 50%, #FB923C 100%);
+}
+.bg-gradient-card {
+  background: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+}
