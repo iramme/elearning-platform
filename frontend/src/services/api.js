@@ -1,10 +1,11 @@
 import axios from 'axios';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000/api';
+
 const api = axios.create({
-  baseURL: 'http://127.0.0.1:8000/api',
+  baseURL: API_URL,
 });
 
-// Intercepteur : ajoute automatiquement le token à chaque requête
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('access_token');
   if (token) {
@@ -13,7 +14,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Intercepteur : rafraîchit le token automatiquement s'il expire (401)
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -22,7 +22,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const refreshToken = localStorage.getItem('refresh_token');
-        const { data } = await axios.post('http://127.0.0.1:8000/api/auth/login/refresh/', {
+        const { data } = await axios.post(`${API_URL}/auth/login/refresh/`, {
           refresh: refreshToken,
         });
         localStorage.setItem('access_token', data.access);
