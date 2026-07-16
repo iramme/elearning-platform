@@ -22,4 +22,13 @@ export const courseService = {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
   },
+
+
+  // Nouvelle fonction : envoie juste l'URL déjà uploadée (pas le fichier)
+  attachVideoToLesson: (lessonId, videoData) =>
+    api.patch(`/lessons/${lessonId}/attach-video/`, {
+      video_url: videoData.url,
+      video_public_id: videoData.publicId,
+      duration_seconds: videoData.duration,
+    }),
 };

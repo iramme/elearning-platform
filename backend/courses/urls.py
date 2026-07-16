@@ -18,4 +18,6 @@ urlpatterns = [
     path('lessons/<int:lesson_id>/upload-video/', LessonVideoUploadView.as_view(), name='upload-video'),
     path('lessons/<int:lesson_id>/upload-resource/', LessonResourceUploadView.as_view(), name='upload-resource'),
     path('courses/<int:course_id>/upload-thumbnail/', CourseThumbnailUploadView.as_view(), name='upload-thumbnail'),
+    path('lessons/<int:lesson_id>/attach-video/', AttachVideoToLessonView.as_view(), name='attach-video'),
+
 ]

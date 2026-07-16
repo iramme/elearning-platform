@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Plus, Upload, Video, FileText, Loader2, Image as ImageIcon, Trash2, CheckCircle2 } from 'lucide-react';
 import { courseService } from '../../services/courseService';
+import { uploadToCloudinary } from '../../services/cloudinaryService';
 
 export default function ManageCourse() {
   const { slug } = useParams();
@@ -62,10 +63,15 @@ export default function ManageCourse() {
   const handleVideoUpload = async (lessonId, file) => {
     setUploadingVideoId(lessonId);
     try {
-      await courseService.uploadVideo(lessonId, file);
+      // 1. Upload direct vers Cloudinary (léger, ne passe pas par notre backend)
+      const videoData = await uploadToCloudinary(file, 'video');
+
+      // 2. On informe juste notre backend de l'URL obtenue (requête légère, pas de fichier)
+      await courseService.attachVideoToLesson(lessonId, videoData);
+
       await fetchCourse();
     } catch (err) {
-      console.error('DETAIL ERREUR VIDEO:', err.response?.data);
+      console.error('DETAIL ERREUR VIDEO:', err);
       alert("Erreur lors de l'upload de la vidéo.");
     } finally {
       setUploadingVideoId(null);

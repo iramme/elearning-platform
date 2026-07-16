@@ -181,3 +181,34 @@ class LessonViewSet(viewsets.ModelViewSet):
             from rest_framework.exceptions import PermissionDenied
             raise PermissionDenied("Vous n'êtes pas l'instructeur de ce cours.")
         serializer.save(course=course)
+
+
+
+class AttachVideoToLessonView(APIView):
+    """
+    Reçoit juste l'URL Cloudinary (déjà uploadée depuis le frontend) et
+    l'associe à la leçon. Aucun fichier ne transite par ce serveur.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, lesson_id):
+        try:
+            lesson = Lesson.objects.get(pk=lesson_id)
+        except Lesson.DoesNotExist:
+            return Response({"error": "Leçon introuvable."}, status=status.HTTP_404_NOT_FOUND)
+
+        if lesson.course.instructor != request.user:
+            return Response({"error": "Non autorisé."}, status=status.HTTP_403_FORBIDDEN)
+
+        lesson.video_url = request.data.get('video_url')
+        lesson.video_public_id = request.data.get('video_public_id', '')
+        duration = request.data.get('duration_seconds', 0)
+        if duration:
+            lesson.duration_seconds = duration
+        lesson.save()
+
+        return Response({
+            "message": "Vidéo associée avec succès.",
+            "video_url": lesson.video_url,
+            "duration_seconds": lesson.duration_seconds
+        }, status=status.HTTP_200_OK)
