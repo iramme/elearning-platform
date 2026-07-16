@@ -2,7 +2,8 @@ from django.urls import path, include
 from rest_framework_nested import routers
 from .views import (
     CategoryViewSet, CourseViewSet, LessonViewSet,
-    LessonVideoUploadView, LessonResourceUploadView, CourseThumbnailUploadView
+    LessonVideoUploadView, LessonResourceUploadView, CourseThumbnailUploadView,
+    AttachVideoToLessonView
 )
 
 router = routers.SimpleRouter()
