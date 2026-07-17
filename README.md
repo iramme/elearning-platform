@@ -171,4 +171,4 @@ Projet réalisé à des fins de démonstration et de portfolio.
 
 ## 👤 Auteur
 
-Développé par **[boudersa kaouther]** · [LinkedIn]([https://linkedin.com/in/to](https://www.linkedin.com/in/kaouther-b-98256939b/)i) · [GitHub](https://github.com/iramme)
+Développé par **[boudersa kaouther]** · [LinkedIn](https://www.linkedin.com/in/kaouther-b-98256939b/) · [GitHub](https://github.com/iramme)
