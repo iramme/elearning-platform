@@ -9,6 +9,7 @@ import { courseService } from '../../services/courseService';
 import { paymentService } from '../../services/paymentService';
 import { reviewService } from '../../services/reviewService';
 import { useAuth } from '../../hooks/useAuth';
+import ReviewForm from '../../components/ui/ReviewForm';
 
 const levelLabels = { BEGINNER: 'Débutant', INTERMEDIATE: 'Intermédiaire', ADVANCED: 'Avancé' };
 
@@ -20,7 +21,7 @@ function formatDuration(seconds) {
 export default function CourseDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated, isStudent } = useAuth();
+  const { isAuthenticated, isStudent, user } = useAuth();
 
   const [course, setCourse] = useState(null);
   const [reviews, setReviews] = useState([]);
@@ -28,19 +29,20 @@ export default function CourseDetail() {
   const [buying, setBuying] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const { data } = await courseService.getCourseBySlug(slug);
-        setCourse(data);
-        const reviewsRes = await reviewService.getReviewsByCourse(data.id);
-        setReviews(reviewsRes.data.results || reviewsRes.data);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+  async function fetchData() {
+    try {
+      const { data } = await courseService.getCourseBySlug(slug);
+      setCourse(data);
+      const reviewsRes = await reviewService.getReviewsByCourse(data.id);
+      setReviews(reviewsRes.data.results || reviewsRes.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
     }
+  }
+
+  useEffect(() => {
     fetchData();
   }, [slug]);
 
@@ -72,8 +74,8 @@ export default function CourseDetail() {
     return <div className="text-center py-32 text-gray-500">Cours introuvable.</div>;
   }
 
-  const hasAnyUnlockedLesson = course.lessons.some((l) => l.video_url);
   const isFullyUnlocked = course.lessons.length > 0 && course.lessons.every((l) => l.video_url);
+  const myExistingReview = reviews.find((r) => r.student_name === user?.username);
 
   return (
     <div className="min-h-screen">
@@ -144,6 +146,17 @@ export default function CourseDetail() {
             <h2 className="text-xl font-bold text-dark mb-4 flex items-center gap-2">
               <MessageSquare className="w-5 h-5" /> Avis des étudiants
             </h2>
+
+            {isStudent && isFullyUnlocked && (
+              <div className="mb-6">
+                <ReviewForm
+                  courseId={course.id}
+                  existingReview={myExistingReview}
+                  onReviewSubmitted={fetchData}
+                />
+              </div>
+            )}
+
             {reviews.length === 0 ? (
               <p className="text-gray-400 text-sm">Aucun avis pour l'instant.</p>
             ) : (
