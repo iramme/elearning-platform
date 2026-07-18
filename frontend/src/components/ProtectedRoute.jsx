@@ -1,12 +1,18 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import useAuthStore from '../store/authStore';
 
-/**
- * Protège une route : redirige vers /login si non connecté,
- * ou vers une page "non autorisé" si le rôle ne correspond pas.
- */
 export default function ProtectedRoute({ children, allowedRoles }) {
   const { isAuthenticated, user } = useAuth();
+  const isInitialized = useAuthStore((state) => state.isInitialized);
+
+  if (!isInitialized) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin w-8 h-8 border-4 border-primary-200 border-t-primary-600 rounded-full" />
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;

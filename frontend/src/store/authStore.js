@@ -1,22 +1,16 @@
 import { create } from 'zustand';
 import { jwtDecode } from 'jwt-decode';
 
-/**
- * Store d'authentification global.
- * Persiste les tokens dans localStorage et décode le rôle depuis le JWT
- * (pas besoin d'appeler l'API pour savoir qui est connecté).
- */
 const useAuthStore = create((set, get) => ({
   user: null,
   isAuthenticated: false,
+  isInitialized: false,
 
-  // Initialise le store au chargement de l'app (lit le token existant)
   initAuth: () => {
     const token = localStorage.getItem('access_token');
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        // Vérifie que le token n'est pas expiré
         if (decoded.exp * 1000 > Date.now()) {
           set({
             user: {
@@ -25,7 +19,9 @@ const useAuthStore = create((set, get) => ({
               role: decoded.role,
             },
             isAuthenticated: true,
+            isInitialized: true,
           });
+          return;
         } else {
           localStorage.clear();
         }
@@ -33,6 +29,7 @@ const useAuthStore = create((set, get) => ({
         localStorage.clear();
       }
     }
+    set({ isInitialized: true });
   },
 
   login: (access, refresh) => {
@@ -46,6 +43,7 @@ const useAuthStore = create((set, get) => ({
         role: decoded.role,
       },
       isAuthenticated: true,
+      isInitialized: true,
     });
   },
 
